@@ -1,2 +1,2 @@
 # emacs
-## my emacs setup
+my emacs setup
