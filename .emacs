@@ -1,110 +1,22 @@
 (require 'package)
-
-(add-to-list 'package-archives '("elpa" . "http://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
-
 (package-initialize)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; edts                                                                   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-(add-to-list 'load-path "/Users/niklasaholm/.emacs.d/edts")
-(add-hook 'after-init-hook 'my-after-init-hook)
-(defun my-after-init-hook ()
-  (require 'edts-start))
-(setq edts-inhibit-package-check 1)
+(load-theme 'dracula t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; elpy                                                                   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
 
-(elpy-enable)
+;; silence bell
+(setq ring-bell-function 'ignore)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; deft                                                                   ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'deft)
-
-(setq deft-directory "~/docs/deft")
-
-(setq deft-extensions '("org"))
-
-(setq deft-default-extension "org")
-
-(setq deft-text-mode 'org-mode)
-
-(setq deft-use-filename-as-title t)
-
-(setq deft-use-filter-string-for-filename t)
-
-(setq deft-auto-save-interval 0)
-
-(global-set-key (kbd "C-c d") 'deft)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; recentf                                                                ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-(setq recentf-max-saved-items 25)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; projectile
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; erlang macros
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun rebar3-ct-suite ()
-  (interactive)
-  (let ((default-directory (projectile-project-root)))
-    (compile (format "rebar3 ct --suite %s" (erlang-get-module)))))
-
-(defun rebar3-ct-case ()
-  (interactive)
-  (erlang-beginning-of-function)
-  (let ((default-directory (projectile-project-root)))
-    (compile (format "rebar3 ct --suite %s --case %s"
-                     (erlang-get-module)
-                     (erlang-get-function-name)))))
-
-(defun rebar3-eunit ()
-  (interactive)
-  (let ((default-directory (projectile-project-root)))
-    (compile (format "rebar3 eunit -v --module %s"
-                     (erlang-get-module)))))
-
-(defun insert-ct-test (str)
-  (interactive "sEnter function name: ")
-  (insert str "({init, Config})  -> Config;\n")
-  (insert str "({'end', Config}) -> Config;\n")
-  (insert str "(Config)          -> ok.")
-)
-
-;; color theme
-(load-theme 'nord t)
-
-;; set cmd key to meta
+;; ;; set cmd key to meta
 (setq mac-option-modifier 'none)
 (setq mac-command-modifier 'meta)
 (setq default-input-method "MacOSX")
 
-;; copy/paste ctrl+c/ctrl+v
-(cua-mode t)
-(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
-(transient-mark-mode 1) ;; No region when it is not highlighted
-(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
 
 ;; remove go to background
 (global-unset-key [(control x)(control z)])
